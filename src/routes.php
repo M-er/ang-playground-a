@@ -13,22 +13,10 @@ use Slim\Http\Response;
  *
  * @return \Psr\Http\Message\ResponseInterface
  */
-/*
-$app->get('/hello/{name}', function ($req, $res, $args) {
-	if($this->has('saludador')) {
-		$saludador = $this->saludador;
-	}
-	return $res;
-});
-*/
-/*
-$app->get('/hello/{name}', function ($req, $res, $args) {
-    $saludador = $this->get('saludador');
 
-    return $res;
-});*/
 $app->post('/login/', "logueador:login");
 $app->get('/logueado/', "logueador:logged");
+$app->get('/salir/', "logueador:logout");
 $app->post('/encripta/', "encriptador:encrypt");
 $app->get('/hello/{name}', "saludador:hola");
 $app->get('/saluda/', "saludador:saluda");

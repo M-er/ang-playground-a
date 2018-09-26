@@ -11,8 +11,7 @@ class Login
 	public function __construct($logger) {$this->logger = $logger;}
 	function getAcc($request, $response, array $args){
 		$sess = Session::loggedInfo();
-        //$db = DBHandler::getHandler();
-		$fh = fopen('./logs/dydback.log','r');
+		$fh = fopen('./logs/app.log','r');
 		while ($line = fgets($fh)) {
 			$acciones[] = $line;
 		}
@@ -21,9 +20,15 @@ class Login
 		$rta['status'] = 'success';
 		return $response->withJson($rta);
 	}
-	protected function logout(){ Session::destroySession(); }
+	function logout($request, $response, array $args){
+		Session::destroySession();
+		$rta['message'] = "Ha salido del sistema, adios guachin";
+		$rta['status'] = "success";
+		return $response->withJson($rta);
+	}
 	function logged($request, $response, array $args){
-		if(Session::getSession()){
+		$sess = Session::getSession();
+		if($sess['id']){
 			$rta['sigue'] = true;
 		}else{
 			Session::destroySession();
@@ -45,21 +50,18 @@ class Login
 				$rta['message'] = 'Ha ingresado correctamente';
 				$this->logger->addInfo("Ingreso | ".$username);
 				Session::destroySession();
-				$sess = Session::createSession($usuario['id'], $usuario['username'], $usuario['type']);
+				$sess = Session::createSession('1', 'matiSim', '1');
 				$rta['username'] = $sess['username'];
 				$rta['id'] = $sess['id'];
 				$rta['tipouser'] = $sess['type'];
-
 			} else {
 				$rta['status'] = "error";
 				$rta['message'] = 'Error de inicio de sesion. Credenciales incorrectas';
 			}
-
 		}else {
 			$rta['status'] = "error";
 			$rta['message'] = 'Usuario no registrado.';
 		}
-
 		return $response->withJson($rta);
 	}
 }

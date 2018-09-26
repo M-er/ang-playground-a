@@ -65,7 +65,7 @@ class Session
 			$sess["id"] = '';
 			$sess["username"] = 'Invitado';
 		}
-		return $sess['id'];
+		return $sess;
 	}
 
 }
